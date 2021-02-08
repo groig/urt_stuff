@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>UrT stats</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <style type="text/css" media="screen">
+      body {
+        font-family: 'Montserrat', sans-serif;
+        padding-top: 3em;
+      }
+      table {
+        text-align: right;
+      }
+      thead {
+        background-color: #01579b;
+        color: #fff;
+        font-weight: 500;
+      }
+      tbody {
+        background-color: #fff;
+      }
+      tr:nth-of-type(even) {
+        background-color: #eee;
+      }
+      table td:first-child {
+        text-align: left !important;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+      }
+      .dataTable-wrapper {
+        width: 80%;
+      }
+      @media only screen and (min-width: 768px) {
+/*        body {
+          padding-top: 3em%;
+        }*/
+      }
+    </style>
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>El Parque - UrT Stats</h1>
+      <table id="stats">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Num. Played</th>
+            <th>Kills</th>
+            <th>Deaths</th>
+            <th>Headshots</th>
+            <th>Max Kill Streak</th>
+            <th>Suicides</th>
+            <th>Ratio</th>
+          </tr>
+        </thead>
+        <tbody>
+       {% for player in data %}
+        <tr>
+          <td>{{player.0}}</td>
+          <td>{{player.1}}</td>
+          <td>{{player.2}}</td>
+          <td>{{player.3}}</td>
+          <td>{{player.4}}</td>
+          <td>{{player.5}}</td>
+          <td>{{player.6}}</td>
+          <td>{{player.7}}</td>
+        </tr>
+       {% endfor %}
+</tbody>
+      </table>
+    </div>
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+  <script charset="utf-8">
+    const dataTable = new simpleDatatables.DataTable("#stats");
+  </script>
+  </body>
+</html>
