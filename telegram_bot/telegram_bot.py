@@ -119,11 +119,12 @@ def most_played(update, context):
 
 def top_ten_kills(update, context):
     CURSOR.execute(
-        "SELECT name, kills FROM xlrstats ORDER BY kills DESC LIMIT 10 )",
+        "SELECT name, kills FROM xlrstats ORDER BY kills DESC LIMIT 10",
         context.args,
     )
-    data = CURSOR.fetchall()[0]
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f"{data[0]}: {data[1]}")
+    data = CURSOR.fetchall()
+    players = [f"{player[0]}: {player[1]}" for player in data]
+    context.bot.send_message(chat_id=update.effective_chat.id, text="\n".join(players))
 
 if __name__ == "__main__":
     main()
