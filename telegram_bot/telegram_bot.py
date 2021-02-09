@@ -18,6 +18,7 @@ def main():
     most_suicides_handler = CommandHandler("most_suicides", most_suicides)
     best_ratio_handler = CommandHandler("best_ratio", best_ratio)
     most_played_handler = CommandHandler("most_played", most_played)
+    top_ten_kills = CommandHandler("top_ten_kills", top_ten_kills)
 
     updater.dispatcher.add_handler(start_handler)
     updater.dispatcher.add_handler(stats_handler)
@@ -28,6 +29,7 @@ def main():
     updater.dispatcher.add_handler(most_suicides_handler)
     updater.dispatcher.add_handler(best_ratio_handler)
     updater.dispatcher.add_handler(most_played_handler)
+    updater.dispatcher.add_handler(top_ten_kills)
 
     updater.start_polling()
 
