@@ -20,6 +20,7 @@ def main():
     most_played_handler = CommandHandler("most_played", most_played)
     top_ten_kills_handler = CommandHandler("top_ten_kills", top_ten_kills)
     player_count_handler = CommandHandler("player_count", player_count)
+    kills_per_game_handler = CommandHandler("kills_per_game", kills_per_game)
 
     updater.dispatcher.add_handler(start_handler)
     updater.dispatcher.add_handler(stats_handler)
@@ -32,6 +33,7 @@ def main():
     updater.dispatcher.add_handler(most_played_handler)
     updater.dispatcher.add_handler(top_ten_kills_handler)
     updater.dispatcher.add_handler(player_count_handler)
+    updater.dispatcher.add_handler(kills_per_game_handler)
 
     updater.start_polling()
 
@@ -54,6 +56,26 @@ def stats(update, context):
             context.bot.send_message(
                 chat_id=update.effective_chat.id,
                 text=f"Name: {data[0]}\nNum. Played: {data[1]}\nKills: {data[2]}\nDeaths: {data[3]}\nHeadshots: {data[4]}\nMax Kill Streak: {data[5]}\nSuicides: {data[6]}\nRatio: {data[7]}",
+            )
+        else:
+            context.bot.send_message(chat_id=update.effective_chat.id, text="No player found")
+
+
+def kills_per_game(update, context):
+    if not context.args or len(context.args) > 1:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Give me a player name")
+    else:
+        CURSOR.execute(
+            "SELECT name, num_played, kills WHERE name=?",
+            context.args,
+        )
+        result = CURSOR.fetchall()
+        if result:
+            data = result[0]
+            context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                kpg=data[2]/data[1],
+                text=f"Name: {data[0]}\nKills/Game: {kpg}",
             )
         else:
             context.bot.send_message(chat_id=update.effective_chat.id, text="No player found")
