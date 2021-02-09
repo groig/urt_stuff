@@ -18,7 +18,7 @@ def main():
     most_suicides_handler = CommandHandler("most_suicides", most_suicides)
     best_ratio_handler = CommandHandler("best_ratio", best_ratio)
     most_played_handler = CommandHandler("most_played", most_played)
-    top_ten_kills = CommandHandler("top_ten_kills", top_ten_kills)
+    top_ten_kills_handler = CommandHandler("top_ten_kills", top_ten_kills)
 
     updater.dispatcher.add_handler(start_handler)
     updater.dispatcher.add_handler(stats_handler)
@@ -55,15 +55,6 @@ def stats(update, context):
             )
         else:
             context.bot.send_message(chat_id=update.effective_chat.id, text="No player found")
-
-
-def most_kills(update, context):
-    CURSOR.execute(
-        "SELECT name, kills FROM xlrstats WHERE kills = ( SELECT MAX(kills) FROM xlrstats )",
-        context.args,
-    )
-    data = CURSOR.fetchall()[0]
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f"{data[0]}: {data[1]} kills")
 
 
 def most_kills(update, context):
@@ -127,12 +118,12 @@ def most_played(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=f"{data[0]}: {data[1]} games played")
 
 def top_ten_kills(update, context):
-    CURSOR.execute(
+    URSOR.execute(
         "SELECT name, kills FROM xlrstats ORDER BY kills DESC LIMIT 10 )",
         context.args,
     )
     data = CURSOR.fetchall()[0]
     context.bot.send_message(chat_id=update.effective_chat.id, text=f"{data[0]}: {data[1]}")
-    
+
 if __name__ == "__main__":
     main()
