@@ -6,7 +6,7 @@ def main():
     print("generating")
     conn = sqlite3.connect("data.sqlite")
     c = conn.cursor()
-    c.execute("SELECT name, num_played, kills, deaths, headshots, max_kill_streak, suicides, ratio, rounds FROM xlrstats")
+    c.execute("SELECT name, num_played, kills, deaths, headshots, max_kill_streak, suicides, ratio, rounds FROM xlrstats ORDER BY ratio DESC")
     data = c.fetchall()
     template_loader = jinja2.FileSystemLoader(searchpath="./")
     template_env = jinja2.Environment(loader=template_loader)
