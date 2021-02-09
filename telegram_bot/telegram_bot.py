@@ -118,7 +118,7 @@ def most_played(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=f"{data[0]}: {data[1]} games played")
 
 def top_ten_kills(update, context):
-    URSOR.execute(
+    CURSOR.execute(
         "SELECT name, kills FROM xlrstats ORDER BY kills DESC LIMIT 10 )",
         context.args,
     )
