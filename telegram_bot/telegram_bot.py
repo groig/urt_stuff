@@ -19,6 +19,7 @@ def main():
     best_ratio_handler = CommandHandler("best_ratio", best_ratio)
     most_played_handler = CommandHandler("most_played", most_played)
     top_ten_kills_handler = CommandHandler("top_ten_kills", top_ten_kills)
+    player_count_handler = CommandHandler("player_count", player_count)
 
     updater.dispatcher.add_handler(start_handler)
     updater.dispatcher.add_handler(stats_handler)
@@ -30,6 +31,7 @@ def main():
     updater.dispatcher.add_handler(best_ratio_handler)
     updater.dispatcher.add_handler(most_played_handler)
     updater.dispatcher.add_handler(top_ten_kills_handler)
+    updater.dispatcher.add_handler(player_count_handler)
 
     updater.start_polling()
 
@@ -125,6 +127,14 @@ def top_ten_kills(update, context):
     data = CURSOR.fetchall()
     players = [f"{player[0]}: {player[1]}" for player in data]
     context.bot.send_message(chat_id=update.effective_chat.id, text="\n".join(players))
+
+def player_count(update, context):
+    CURSOR.execute(
+        "SELECT COUNT(guid) FROM xlrstats;",
+        context.args,
+    )
+    data = CURSOR.fetchall()[0]
+    context.bot.send_message(chat_id=update.effective_chat.id, text=f"{data[0]} players have pulled the trigger")
 
 if __name__ == "__main__":
     main()
