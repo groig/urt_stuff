@@ -29,7 +29,7 @@ def main():
     updater.dispatcher.add_handler(most_suicides_handler)
     updater.dispatcher.add_handler(best_ratio_handler)
     updater.dispatcher.add_handler(most_played_handler)
-    updater.dispatcher.add_handler(top_ten_kills)
+    updater.dispatcher.add_handler(top_ten_kills_handler)
 
     updater.start_polling()
 
