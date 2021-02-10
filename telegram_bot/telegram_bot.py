@@ -66,7 +66,7 @@ def kills_per_game(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text="Give me a player name")
     else:
         CURSOR.execute(
-            "SELECT name, (kills / num_played) FROM xlrstats WHERE name=?"
+            "SELECT name, (kills / num_played) FROM xlrstats WHERE name=?",
             context.args,
         )
         result = CURSOR.fetchall()
