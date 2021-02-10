@@ -17,7 +17,4 @@ def main():
         fh.write(output_text)
 
 if __name__ == "__main__":
-    while True:
         main()
-        print("sleeping")
-        sleep(300)
