@@ -1,10 +1,12 @@
 import sqlite3
 import os
+from .pyquake3 import PyQuake3
 
 from telegram.ext import CommandHandler, Updater
 
 CURSOR = sqlite3.connect("data.sqlite", check_same_thread=False).cursor()
 
+rcon = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
 
 def main():
     updater = Updater(token=os.getenv("TELEGRAM_TOKEN"), use_context=True)
@@ -21,6 +23,7 @@ def main():
     top_ten_kills_handler = CommandHandler("top_ten_kills", top_ten_kills)
     player_count_handler = CommandHandler("player_count", player_count)
     kills_per_game_handler = CommandHandler("kills_per_game", kills_per_game)
+    server_status_handler = CommandHandler("server_status", server_status)
 
     updater.dispatcher.add_handler(start_handler)
     updater.dispatcher.add_handler(stats_handler)
@@ -34,6 +37,7 @@ def main():
     updater.dispatcher.add_handler(top_ten_kills_handler)
     updater.dispatcher.add_handler(player_count_handler)
     updater.dispatcher.add_handler(kills_per_game_handler)
+    updater.dispatcher.add_handler(server_status_handler)
 
     updater.start_polling()
 
@@ -156,6 +160,10 @@ def player_count(update, context):
     )
     data = CURSOR.fetchall()[0]
     context.bot.send_message(chat_id=update.effective_chat.id, text=f"{data[0]} players have pulled the trigger")
+
+def server_status(update, context):
+    status = rcon.rcon("status")
+    context.bot.send_message(chat_id=update.effective_chat.id, text=status[1].decode())
 
 if __name__ == "__main__":
     main()
