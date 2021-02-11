@@ -21,6 +21,7 @@ def main():
     best_ratio_handler = CommandHandler("best_ratio", best_ratio)
     most_played_handler = CommandHandler("most_played", most_played)
     top_ten_kills_handler = CommandHandler("top_ten_kills", top_ten_kills)
+    top_ten_ratio_handler = CommandHandler("top_ten_ratio", top_ten_ratio)
     player_count_handler = CommandHandler("player_count", player_count)
     kills_per_game_handler = CommandHandler("kills_per_game", kills_per_game)
     server_status_handler = CommandHandler("server_status", server_status)
@@ -35,6 +36,7 @@ def main():
     updater.dispatcher.add_handler(best_ratio_handler)
     updater.dispatcher.add_handler(most_played_handler)
     updater.dispatcher.add_handler(top_ten_kills_handler)
+    updater.dispatcher.add_handler(top_ten_ratio_handler)
     updater.dispatcher.add_handler(player_count_handler)
     updater.dispatcher.add_handler(kills_per_game_handler)
     updater.dispatcher.add_handler(server_status_handler)
@@ -147,6 +149,15 @@ def most_played(update, context):
 def top_ten_kills(update, context):
     CURSOR.execute(
         "SELECT name, kills FROM xlrstats ORDER BY kills DESC LIMIT 10",
+        context.args,
+    )
+    data = CURSOR.fetchall()
+    players = [f"{player[0]}: {player[1]}" for player in data]
+    context.bot.send_message(chat_id=update.effective_chat.id, text="\n".join(players))
+
+def top_ten_ratio(update, context):
+    CURSOR.execute(
+        "SELECT name, ratio FROM xlrstats ORDER BY kills DESC LIMIT 10",
         context.args,
     )
     data = CURSOR.fetchall()
