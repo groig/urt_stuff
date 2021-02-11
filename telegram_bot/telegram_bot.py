@@ -157,7 +157,7 @@ def top_ten_kills(update, context):
 
 def top_ten_ratio(update, context):
     CURSOR.execute(
-        "SELECT name, ratio FROM xlrstats ORDER BY kills DESC LIMIT 10",
+        "SELECT name, ratio FROM xlrstats ORDER BY ratio DESC LIMIT 10",
         context.args,
     )
     data = CURSOR.fetchall()
