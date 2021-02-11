@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from .pyquake3 import PyQuake3
+from pyquake3 import PyQuake3
 
 from telegram.ext import CommandHandler, Updater
 
