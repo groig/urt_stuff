@@ -62,7 +62,7 @@
           </tr>
         </thead>
         <tbody>
-       {% for player in data %}
+       {% for player in general_data%}
         <tr>
           <td>{{player.0}}</td>
           <td>{{player.1}}</td>
@@ -74,8 +74,57 @@
           <td>{{player.7}}</td>
         </tr>
        {% endfor %}
-</tbody>
+        </tbody>
       </table>
+      <h2>Frags repartition</h2>
+      {% for player, frags in frags_repartition.items()%}
+      <h4>{{player}}</h4>
+      <table>
+        <thead>
+          <tr>
+            {%for frag in frags%}
+              <th>{{frag.0}}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            {%for frag in frags%}
+              <td>{{frag.1}}</th>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+      {% endfor %}
+      <h2>Deaths repartition</h2>
+      {% for player, deaths in deaths_repartition.items()%}
+      <h4>{{player}}</h4>
+      <table>
+        <thead>
+          <tr>
+            {%for death in deaths%}
+              <th>{{death.0}}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            {%for death in deaths%}
+              <td>{{death.1}}</th>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+      {% endfor %}
+      <h2>Favorite Weapons</h2>
+      <ul>
+      {% for player in favorite_weapons %}
+      <li>{{player.0}}: {{player.1}}</li>
+      {% endfor %}
+      </ul>
+
     </div>
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
   <script charset="utf-8">
