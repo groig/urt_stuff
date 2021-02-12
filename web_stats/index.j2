@@ -133,11 +133,14 @@
       {% for player, frags in frags_repartition.items()%}
         <div class="grid-cell">
           <h4>{{player}}</h4>
-          <ul class="box">
-          {%for frag in frags%}
-            <li>{{frag.0}}: {{frag.1}}</li>
-          {% endfor %}
-          </ul>
+          <table>
+            <thead><th>Player</th><th>Qty</th></thead>
+            <tbody>
+              {%for death in deaths%}
+                <tr><td>{{frag.0}}</td><td>{{frag.1}}</td></tr>
+              {% endfor %}  
+            </tbody>
+          </table>
         </div>
       {% endfor %}
       </div>
@@ -146,11 +149,14 @@
       {% for player, deaths in deaths_repartition.items()%}
         <div class="grid-cell">
           <h4>{{player}}</h4>
-          <ul class="box">
-          {%for death in deaths%}
-            <li>{{death.0}}: {{death.1}}</li>
-          {% endfor %}
-          </ul>
+          <table>
+            <thead><th>Player</th><th>Qty</th></thead>
+            <tbody>
+              {%for death in deaths%}
+                <tr><td>{{death.0}}</td><td>{{death.1}}</td></tr>
+              {% endfor %}  
+            </tbody>
+          </table>
         </div>
       {% endfor %}
       </div>
@@ -159,11 +165,14 @@
         {% for player, weapons in favorite_weapons.items() %}
         <div class="grid-cell">
           <h4>{{player}}</h4>
-          <ul class="box">
-            {% for weapon in weapons %}
-              <li>{{weapon.0}}: {{weapon.1}}</li>
-            {% endfor %}
-          </ul>
+          <table>
+            <thead><th>Weapon</th><th>Qty</th></thead>
+            <tbody>
+              {%for death in deaths%}
+                <tr><td>{{weapon.0}}</td><td>{{weapon.1}}</td></tr>
+              {% endfor %}  
+            </tbody>
+          </table>
         </div>
         {% endfor %}
       </div>
