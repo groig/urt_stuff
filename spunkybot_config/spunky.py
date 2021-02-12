@@ -1083,7 +1083,7 @@ class LogParser(object):
             tk_event = False
 
 
-            if killer.get_registered_user() and victim.get_registered_user():
+            if killer.get_registered_user() and victim.get_registered_user() and death_cause != "MOD_CHANGE_TEAM":
                 curs.execute('INSERT INTO frags VALUES (?, ?, ?)', (killer_name, victim_name, death_cause))
 
 
