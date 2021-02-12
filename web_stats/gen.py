@@ -2,6 +2,7 @@ import os
 import sqlite3
 import jinja2
 from time import sleep
+import datetime
 from pyquake3 import PyQuake3
 
 server = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
@@ -45,7 +46,7 @@ def main():
     server.update()
     server_data = f"Running map {server.values[b'mapname'].decode()} with {len(server.players)} player(s)."
     players_data = [f"{player.name} with {player.frags} frags and a {player.ping} ms ping" for player in server.players]
-    output_text = template.render(general_data=general_data, favorite_weapons=weapons_data, frags_repartition=frags_data, deaths_repartition=deaths_data, server_data=server_data, players_data=players_data)
+    output_text = template.render(general_data=general_data, favorite_weapons=weapons_data, frags_repartition=frags_data, deaths_repartition=deaths_data, server_data=server_data, players_data=players_data, dt=datetime.datetime.now())
 
     with open("index.html", "w") as fh:
         fh.write(output_text)
