@@ -134,11 +134,10 @@
         <div class="grid-cell">
           <h4>{{player}}</h4>
           <table>
-            <thead><th>Player</th><th>Qty</th></thead>
             <tbody>
-              {%for death in deaths%}
+              {%for frag in frags%}
                 <tr><td>{{frag.0}}</td><td>{{frag.1}}</td></tr>
-              {% endfor %}  
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -150,11 +149,10 @@
         <div class="grid-cell">
           <h4>{{player}}</h4>
           <table>
-            <thead><th>Player</th><th>Qty</th></thead>
             <tbody>
               {%for death in deaths%}
                 <tr><td>{{death.0}}</td><td>{{death.1}}</td></tr>
-              {% endfor %}  
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -166,11 +164,10 @@
         <div class="grid-cell">
           <h4>{{player}}</h4>
           <table>
-            <thead><th>Weapon</th><th>Qty</th></thead>
             <tbody>
-              {%for death in deaths%}
+              {%for weapon in weapons %}
                 <tr><td>{{weapon.0}}</td><td>{{weapon.1}}</td></tr>
-              {% endfor %}  
+              {% endfor %}
             </tbody>
           </table>
         </div>
