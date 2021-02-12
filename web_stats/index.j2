@@ -15,6 +15,20 @@
       body {
         font-family: 'Montserrat', sans-serif;
       }
+      nav ul {
+        display: flex;
+        justify-content: center;
+      }
+      nav ul li {
+        text-transform: capitalize;
+        margin: 0 1em;
+      }
+      nav ul li a {
+        color: #01579b;
+      }
+      nav ul li a:hover {
+        text-decoration: none;
+      }
       h4 {
         background-color: #01579b;
         color: #fff;
@@ -109,6 +123,13 @@
   <body>
     <div class="container">
       <h1>El Parque - UrT Stats</h1>
+      <nav>
+        <ul>
+          <li><a href="#frags">frags</a></li>
+          <li><a href="#deaths">deaths</a></li>
+          <li><a href="#weapons">weapons</a></li>
+        </ul>
+      </nav>
       <h3>{{server_data}}</h3>
       <h5>Updated: {{dt}}</h5>
       <ol>
@@ -116,7 +137,7 @@
         <li>{{player}}</li>
       {% endfor %}
       </ol>
-      <table id="stats" class="main-table">
+      <table id="stats">
         <thead>
           <tr>
             <th>Name</th>
@@ -144,7 +165,7 @@
         {% endfor %}
         </tbody>
       </table>
-      <h2>Frags repartition</h2>
+      <h2 id="frags">Frags repartition</h2>
       <div class="grid grid-1of4">
       {% for player, frags in frags_repartition.items()%}
         <div class="grid-cell">
@@ -166,7 +187,7 @@
         </div>
       {% endfor %}
       </div>
-      <h2>Deaths repartition</h2>
+      <h2 id="deaths">Deaths repartition</h2>
       <div class="grid grid-1of4">
       {% for player, deaths in deaths_repartition.items()%}
         <div class="grid-cell">
@@ -188,7 +209,7 @@
         </div>
       {% endfor %}
       </div>
-      <h2>Favorite Killing Weapons</h2>
+      <h2 id="weapons">Favorite Killing Weapons</h2>
       <div class="grid grid-1of4">
         {% for player, weapons in favorite_weapons.items() %}
         <div class="grid-cell">
