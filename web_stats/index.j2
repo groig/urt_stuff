@@ -97,7 +97,7 @@
       <h5>{{server_data}}</h5>
       <ol>
       {% for player in players_data %}
-      <li>{{player}}</li>
+        <li>{{player}}</li>
       {% endfor %}
       </ol>
       <table id="stats">
@@ -150,26 +150,25 @@
           {%for death in deaths%}
             <li>{{death.0}}: {{death.1}}</li>
           {% endfor %}
-        </ul>
-      </div>
+          </ul>
+        </div>
       {% endfor %}
       </div>
       <h2>Favorite Weapons</h2>
       <div class="grid grid-1of4">
         {% for player, weapons in favorite_weapons.items() %}
         <div class="grid-cell">
-        <h4>{{player}}</h4>
-        <ul class="box">
-          {% for weapon in weapons %}
-            <li>{{weapon.0}}: {{weapon.1}}</li>
-          {% endfor %}
-        </ul>
+          <h4>{{player}}</h4>
+          <ul class="box">
+            {% for weapon in weapons %}
+              <li>{{weapon.0}}: {{weapon.1}}</li>
+            {% endfor %}
+          </ul>
         </div>
         {% endfor %}
       </div>
-  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
-  <script charset="utf-8">
-    const dataTable = new simpleDatatables.DataTable("#stats", {"order": [[ 7, "desc" ]]});
-  </script>
+    </div>
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+  <script>const dataTable = new simpleDatatables.DataTable("#stats", {"order": [[ 7, "desc" ]]});</script>
   </body>
 </html>
