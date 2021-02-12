@@ -187,17 +187,18 @@ def stream(update, context):
         if os.path.exists("telegram-stream"):
             msg = "Stream is on"
         context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
-    if len(context.args) > 1:
+    elif len(context.args) > 1:
         context.bot.send_message(chat_id=update.effective_chat.id, text="Wrong args")
-    operation = context.args[0]
-    if operation.lower() == "on":
-        if not os.path.exists(filename):
-            open(filename, "a").close()
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is on")
-    else:
-        if os.path.exists(filename):
-            os.remove(filename)
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is off")
+    elif len(context.args) == 1
+        operation = context.args[0]
+        if operation.lower() == "on":
+            if not os.path.exists(filename):
+                open(filename, "a").close()
+            context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is on")
+        else:
+            if os.path.exists(filename):
+                os.remove(filename)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is off")
 
 if __name__ == "__main__":
     main()
