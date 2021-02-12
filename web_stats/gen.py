@@ -18,6 +18,13 @@ def main():
 
     favorite_weapons = c.execute("select fragger, weapon, count(*) as frags from frags group by lower(fragger), lower(weapon) order by lower(fragger) asc, count(*) desc").fetchall()
 
+    weapons_data = {}
+    for player in favorite_weapons:
+        if not player[0] in weapons_data:
+            weapons_data[player[0]] = [(player[1].replace('UT_MOD_', ''), player[2])]
+        else:
+            weapons_data[player[0]].append((player[1].replace('UT_MOD_', ''), player[2]))
+
     frags_repartition = c.execute("select fragger, fragged, count(*) as frags from frags group by lower(fragger), lower(fragged) order by lower(fragger) asc, count(*) desc").fetchall()
     frags_data = {}
     for frag in frags_repartition:
@@ -38,7 +45,7 @@ def main():
     server.update()
     server_data = f"Running map {server.values[b'mapname'].decode()} with {len(server.players)} player(s)."
     players_data = [f"{player.name} with {player.frags} frags and a {player.ping} ms ping" for player in server.players]
-    output_text = template.render(general_data=general_data, favorite_weapons=favorite_weapons, frags_repartition=frags_data, deaths_repartition=deaths_data, server_data=server_data, players_data=players_data)
+    output_text = template.render(general_data=general_data, favorite_weapons=weapons_data, frags_repartition=frags_data, deaths_repartition=deaths_data, server_data=server_data, players_data=players_data)
 
     with open("index.html", "w") as fh:
         fh.write(output_text)

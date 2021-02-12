@@ -125,11 +125,14 @@
       </table>
       {% endfor %}
       <h2>Favorite Weapons</h2>
+      {% for player, weapons in favorite_weapons.items() %}
+      <h4>{{player}}</h4>
       <ul>
-      {% for player in favorite_weapons %}
-      <li>{{player.0}}: {{player.1}}</li>
-      {% endfor %}
+        {% for weapon in weapons %}
+          <li>{{weapon.0}}: {{weapon.1}}</li>
+        {% endfor %}
       </ul>
+      {% endfor %}
 
     </div>
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
