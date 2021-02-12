@@ -14,7 +14,6 @@
       }
       body {
         font-family: 'Montserrat', sans-serif;
-        padding-top: 3em;
       }
       h4 {
         background-color: #01579b;
@@ -58,6 +57,7 @@
       }
       tbody tr:hover {
         color: #01579b;
+        cursor: pointer;
       }
       .container {
         display: flex;
@@ -147,11 +147,11 @@
       <div class="grid grid-1of4">
       {% for player, frags in frags_repartition.items()%}
         <div class="grid-cell">
-          <h4>{{player}}</h4>
           <table>
             <thead>
-              <th>Player</th>
-              <th>Qty</th>
+              <tr>
+                <th colspan="2">{{player}}</th>
+              </tr>
             </thead>
             <tbody>
               {%for frag in frags%}
@@ -169,9 +169,12 @@
       <div class="grid grid-1of4">
       {% for player, deaths in deaths_repartition.items()%}
         <div class="grid-cell">
-          <h4>{{player}}</h4>
           <table>
-            <thead><th>Player</th><th>Qty</th></thead>
+            <thead>
+              <tr>
+                <th colspan="2">{{player}}</th>
+              </tr>
+            </thead>
             <tbody>
               {%for death in deaths%}
               <tr>
@@ -188,11 +191,11 @@
       <div class="grid grid-1of4">
         {% for player, weapons in favorite_weapons.items() %}
         <div class="grid-cell">
-          <h4>{{player}}</h4>
           <table>
             <thead>
-              <th>Weapon</th>
-              <th>Qty</th>
+              <tr>
+                <th colspan="2">{{player}}</th>
+              </tr>
             </thead>
             <tbody>
               {%for weapon in weapons%}
