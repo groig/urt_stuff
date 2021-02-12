@@ -168,7 +168,7 @@ class PyQuake3(object):
         for player in data.split(b'\n'):
             if not player:
                 continue
-            match = self.player_reo.match(player)
+            match = self.player_reo.match(player.decode())
             if not match:
                 continue
             frags, ping, name = match.groups()

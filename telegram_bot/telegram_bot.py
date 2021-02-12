@@ -6,7 +6,7 @@ from telegram.ext import CommandHandler, Updater
 
 CURSOR = sqlite3.connect("data.sqlite", check_same_thread=False).cursor()
 
-rcon = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
+server = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
 
 def main():
     updater = Updater(token=os.getenv("TELEGRAM_TOKEN"), use_context=True)
@@ -173,8 +173,10 @@ def player_count(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=f"{data[0]} players have pulled the trigger")
 
 def server_status(update, context):
-    status = rcon.rcon("status")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=status[1].decode())
+    server.update()
+    server_data = f"running map {server.values[b'mapname'].decode()} with {len(server.players)} player(s)."
+    players_data = "\n".join([f"{player.name} with {player.frags} frags and a {player.ping} ms ping" for player in server.players])
+    context.bot.send_message(chat_id=update.effective_chat.id, text=f"{server_data}\n{players_data}")
 
 if __name__ == "__main__":
     main()
