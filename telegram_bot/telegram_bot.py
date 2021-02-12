@@ -25,6 +25,7 @@ def main():
     player_count_handler = CommandHandler("player_count", player_count)
     kills_per_game_handler = CommandHandler("kills_per_game", kills_per_game)
     server_status_handler = CommandHandler("server_status", server_status)
+    stream_handler = CommandHandler("stream", stream)
 
     updater.dispatcher.add_handler(start_handler)
     updater.dispatcher.add_handler(stats_handler)
@@ -40,6 +41,7 @@ def main():
     updater.dispatcher.add_handler(player_count_handler)
     updater.dispatcher.add_handler(kills_per_game_handler)
     updater.dispatcher.add_handler(server_status_handler)
+    updater.dispatcher.add_handler(stream_handler)
 
     updater.start_polling()
 
@@ -177,6 +179,25 @@ def server_status(update, context):
     server_data = f"running map {server.values[b'mapname'].decode()} with {len(server.players)} player(s)."
     players_data = "\n".join([f"{player.name} with {player.frags} frags and a {player.ping} ms ping" for player in server.players])
     context.bot.send_message(chat_id=update.effective_chat.id, text=f"{server_data}\n{players_data}")
+
+def stream(update, context):
+    filename = "telegram-stream"
+    if not context.args:
+        msg = "Stream is off"
+        if os.path.exists("telegram-stream"):
+            msg = "Stream is on"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
+    if len(context.args) > 1:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Wrong args")
+    operation = context.args[0]
+    if operation.lower() == "on":
+        if not os.path.exists(filename):
+            open(filename, "a").close()
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is on")
+    else:
+        if os.path.exists(filename):
+            os.remove(filename)
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is off")
 
 if __name__ == "__main__":
     main()
