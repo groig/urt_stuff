@@ -189,16 +189,18 @@ def stream(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
     elif len(context.args) > 1:
         context.bot.send_message(chat_id=update.effective_chat.id, text="Wrong args")
-    elif len(context.args) == 1
-        operation = context.args[0]
-        if operation.lower() == "on":
+    else:
+        operation = context.args[0].lower()
+        if operation == "on":
             if not os.path.exists(filename):
                 open(filename, "a").close()
             context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is on")
-        else:
+        elif operation == "off":
             if os.path.exists(filename):
                 os.remove(filename)
             context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is off")
+        else:
+            context.bot.send_message(chat_id=update.effective_chat.id, text="u dumb")
 
 if __name__ == "__main__":
     main()
