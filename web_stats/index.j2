@@ -14,13 +14,13 @@
       }
       body {
         font-family: 'Montserrat', sans-serif;
-        padding-top: 3em;
       }
       h4 {
         background-color: #01579b;
         color: #fff;
         margin: 0;
         padding: 0.5em 0.75em;
+        text-align: center;
       }
       ul {
         list-style-type: none;
@@ -32,6 +32,16 @@
       }
       table {
         text-align: right;
+        width: 100%;
+      }
+      table,
+      th,
+      td {
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 0.75em;
       }
       thead {
         background-color: #01579b;
@@ -39,13 +49,15 @@
         font-weight: 500;
       }
       tbody {
-        background-color: #fff;
-      }
-      tr:nth-of-type(even) {
         background-color: #eee;
       }
-      table td:first-child {
+      table td:first-child,
+      table th:first-child {
         text-align: left !important;
+      }
+      tbody tr:hover {
+        color: #01579b;
+        cursor: pointer;
       }
       .container {
         display: flex;
@@ -88,6 +100,9 @@
       .dataTable-wrapper {
         width: 100%;
       }
+      .number {
+        font-family: monospace;
+      }
     </style>
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
   </head>
@@ -100,7 +115,7 @@
         <li>{{player}}</li>
       {% endfor %}
       </ol>
-      <table id="stats">
+      <table id="stats" class="main-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -117,13 +132,13 @@
         {% for player in general_data%}
         <tr>
           <td>{{player.0}}</td>
-          <td>{{player.1}}</td>
-          <td>{{player.2}}</td>
-          <td>{{player.3}}</td>
-          <td>{{player.4}}</td>
-          <td>{{player.5}}</td>
-          <td>{{player.6}}</td>
-          <td>{{player.7}}</td>
+          <td class="number">{{player.1}}</td>
+          <td class="number">{{player.2}}</td>
+          <td class="number">{{player.3}}</td>
+          <td class="number">{{player.4}}</td>
+          <td class="number">{{player.5}}</td>
+          <td class="number">{{player.6}}</td>
+          <td class="number">{{player.7}}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -132,11 +147,18 @@
       <div class="grid grid-1of4">
       {% for player, frags in frags_repartition.items()%}
         <div class="grid-cell">
-          <h4>{{player}}</h4>
           <table>
+            <thead>
+              <tr>
+                <th colspan="2">{{player}}</th>
+              </tr>
+            </thead>
             <tbody>
               {%for frag in frags%}
-                <tr><td>{{frag.0}}</td><td>{{frag.1}}</td></tr>
+              <tr>
+                <td>{{frag.0}}</td>
+                <td class="number">{{frag.1}}</td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -147,26 +169,40 @@
       <div class="grid grid-1of4">
       {% for player, deaths in deaths_repartition.items()%}
         <div class="grid-cell">
-          <h4>{{player}}</h4>
           <table>
+            <thead>
+              <tr>
+                <th colspan="2">{{player}}</th>
+              </tr>
+            </thead>
             <tbody>
               {%for death in deaths%}
-                <tr><td>{{death.0}}</td><td>{{death.1}}</td></tr>
+              <tr>
+                <td>{{death.0}}</td>
+                <td class="number">{{death.1}}</td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
       {% endfor %}
       </div>
-      <h2>Favorite Weapons</h2>
+      <h2>Favorite Killing Weapons</h2>
       <div class="grid grid-1of4">
         {% for player, weapons in favorite_weapons.items() %}
         <div class="grid-cell">
-          <h4>{{player}}</h4>
           <table>
+            <thead>
+              <tr>
+                <th colspan="2">{{player}}</th>
+              </tr>
+            </thead>
             <tbody>
-              {%for weapon in weapons %}
-                <tr><td>{{weapon.0}}</td><td>{{weapon.1}}</td></tr>
+              {%for weapon in weapons%}
+              <tr>
+                <td>{{weapon.0}}</td>
+                <td class="number">{{weapon.1}}</td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
