@@ -57,10 +57,8 @@ def is_streaming():
     return os.path.exists("telegram-stream")
 
 def send_update(msg):
-    print msg
     if is_streaming():
         url = "https://api.telegram.org/bot{token}/sendMessage?chat_id={group_id}&text={msg}".format(token=TELEGRAM_TOKEN, group_id=TELEGRAM_GROUP_ID, msg=urllib2.quote(msg))
-        print url
         urllib2.urlopen(url)
 
 
