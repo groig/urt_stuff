@@ -7,9 +7,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <style type="text/css" media="screen">
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
       body {
         font-family: 'Montserrat', sans-serif;
         padding-top: 3em;
+      }
+      h4 {
+        background-color: #01579b;
+        color: #fff;
+        margin: 0;
+        padding: 0.5em 0.75em;
+      }
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        line-height: 1.5;
       }
       table {
         text-align: right;
@@ -33,14 +52,41 @@
         align-items: center;
         justify-content: space-around;
         flex-direction: column;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+        margin: -1em 0 0 -1em;
+      }
+      .grid-cell {
+        flex: 1;
+        margin: 0;
+        padding: 1em 0 0 1em;
+      }
+      .grid-fit > .grid-cell {
+        flex: 1;
+      }
+      .grid-full > .grid-cell {
+        flex: 0 0 100%;
+      }
+      .grid-1of2 > .grid-cell {
+        flex: 0 0 50%
+      }
+      .grid-1of3 > .grid-cell {
+        flex: 0 0 33.3333%
+      }
+      .grid-1of4 > .grid-cell {
+        flex: 0 0 25%
+      }
+      .box {
+        background-color: #eee;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 0.75em;
       }
       .dataTable-wrapper {
-        width: 80%;
-      }
-      @media only screen and (min-width: 768px) {
-/*        body {
-          padding-top: 3em%;
-        }*/
+        width: 100%;
       }
     </style>
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -56,7 +102,7 @@
       </ol>
       <table id="stats">
         <thead>
-        <tr>
+          <tr>
             <th>Name</th>
             <th>Rounds</th>
             <th>Kills</th>
@@ -68,7 +114,7 @@
           </tr>
         </thead>
         <tbody>
-       {% for player in general_data%}
+        {% for player in general_data%}
         <tr>
           <td>{{player.0}}</td>
           <td>{{player.1}}</td>
@@ -79,62 +125,48 @@
           <td>{{player.6}}</td>
           <td>{{player.7}}</td>
         </tr>
-       {% endfor %}
+        {% endfor %}
         </tbody>
       </table>
       <h2>Frags repartition</h2>
+      <div class="grid grid-1of4">
       {% for player, frags in frags_repartition.items()%}
-      <h4>{{player}}</h4>
-      <table>
-        <thead>
-          <tr>
-            {%for frag in frags%}
-              <th>{{frag.0}}</th>
-            {% endfor %}
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            {%for frag in frags%}
-              <td>{{frag.1}}</th>
-            {% endfor %}
-          </tr>
-        </tbody>
-      </table>
+        <div class="grid-cell">
+          <h4>{{player}}</h4>
+          <ul class="box">
+          {%for frag in frags%}
+            <li>{{frag.0}}: {{frag.1}}</li>
+          {% endfor %}
+          </ul>
+        </div>
       {% endfor %}
+      </div>
       <h2>Deaths repartition</h2>
+      <div class="grid grid-1of4">
       {% for player, deaths in deaths_repartition.items()%}
-      <h4>{{player}}</h4>
-      <table>
-        <thead>
-          <tr>
-            {%for death in deaths%}
-              <th>{{death.0}}</th>
-            {% endfor %}
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            {%for death in deaths%}
-              <td>{{death.1}}</th>
-            {% endfor %}
-          </tr>
-        </tbody>
-      </table>
+        <div class="grid-cell">
+          <h4>{{player}}</h4>
+          <ul class="box">
+          {%for death in deaths%}
+            <li>{{death.0}}: {{death.1}}</li>
+          {% endfor %}
+        </ul>
+      </div>
       {% endfor %}
+      </div>
       <h2>Favorite Weapons</h2>
-      {% for player, weapons in favorite_weapons.items() %}
-      <h4>{{player}}</h4>
-      <ul>
-        {% for weapon in weapons %}
-          <li>{{weapon.0}}: {{weapon.1}}</li>
+      <div class="grid grid-1of4">
+        {% for player, weapons in favorite_weapons.items() %}
+        <div class="grid-cell">
+        <h4>{{player}}</h4>
+        <ul class="box">
+          {% for weapon in weapons %}
+            <li>{{weapon.0}}: {{weapon.1}}</li>
+          {% endfor %}
+        </ul>
+        </div>
         {% endfor %}
-      </ul>
-      {% endfor %}
-
-    </div>
+      </div>
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
   <script charset="utf-8">
     const dataTable = new simpleDatatables.DataTable("#stats", {"order": [[ 7, "desc" ]]});
