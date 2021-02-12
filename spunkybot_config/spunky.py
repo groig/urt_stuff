@@ -33,6 +33,7 @@ import sqlite3
 import math
 import textwrap
 import random
+import urllib2
 import ConfigParser
 import logging.handlers
 from Queue import Queue
@@ -47,6 +48,23 @@ from lib.pyquake3 import PyQuake3
 logger = logging.getLogger('spunkybot')
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
+
+
+TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_GROUP_ID=os.getenv("TELEGRAM_GROUP_ID")
+
+def is_streaming():
+    return os.path.exists("telegram-stream")
+
+def send_update(msg):
+    print msg
+    if is_streaming():
+        url = "https://api.telegram.org/bot{token}/sendMessage?chat_id={group_id}&text={msg}".format(token=TELEGRAM_TOKEN, group_id=TELEGRAM_GROUP_ID, msg=urllib2.quote(msg))
+        print url
+        urllib2.urlopen(url)
+
+
+
 
 # Bot player number
 BOT_PLAYER_NUM = 1022
@@ -983,6 +1001,7 @@ class LogParser(object):
             player_auth = player.get_authname()
             player_name = "%s [^5%s^7]" % (player_name, player_auth) if player_auth else player_name
             player_id = player.get_player_id()
+            send_update("{player_name} has entered the battle".format(player_name=player_name))
             # Welcome message for registered players
             if player.get_registered_user() and player.get_welcome_msg():
                 self.game.rcon_say("^3Everyone welcome back ^7%s^3, player number ^7#%s^3, to this server" % (player_name, player_id))
@@ -1015,6 +1034,7 @@ class LogParser(object):
                 player.clear_tk(player_num)
                 player.clear_grudged_player(player_num)
             logger.debug("ClientDisconnect: Player %d %s has left the game", player_num, player_name)
+            send_update("{player_name} has disconnected".format(player_name=player_name))
 
     def handle_hit(self, line):
         """
@@ -1086,6 +1106,8 @@ class LogParser(object):
             if killer.get_registered_user() and victim.get_registered_user() and death_cause != "MOD_CHANGE_TEAM":
                 curs.execute('INSERT INTO frags VALUES (?, ?, ?)', (killer_name, victim_name, death_cause))
 
+            msg = parts[1].strip().replace("UT_MOD_", "")
+            send_update(msg)
 
             # teamkill event - disabled for FFA, LMS, Jump, for all other game modes team kills are counted and punished
             if not self.ffa_lms_gametype:
