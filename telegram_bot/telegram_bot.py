@@ -53,7 +53,7 @@ def stats(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text="Give me a player name")
     else:
         CURSOR.execute(
-            "SELECT name, num_played, kills, deaths, headshots, max_kill_streak, suicides, ratio, rounds FROM xlrstats WHERE name=?",
+            "SELECT name, rounds, kills, deaths, headshots, max_kill_streak, suicides, ratio, rounds FROM xlrstats WHERE name=?",
             context.args,
         )
         result = CURSOR.fetchall()
@@ -61,7 +61,7 @@ def stats(update, context):
             data = result[0]
             context.bot.send_message(
                 chat_id=update.effective_chat.id,
-                text=f"Name: {data[0]}\nNum. Played: {data[1]}\nKills: {data[2]}\nDeaths: {data[3]}\nHeadshots: {data[4]}\nMax Kill Streak: {data[5]}\nSuicides: {data[6]}\nRatio: {data[7]}",
+                text=f"Name: {data[0]}\nRounds: {data[1]}\nKills: {data[2]}\nDeaths: {data[3]}\nHeadshots: {data[4]}\nMax Kill Streak: {data[5]}\nSuicides: {data[6]}\nRatio: {data[7]}",
             )
         else:
             context.bot.send_message(chat_id=update.effective_chat.id, text="No player found")
@@ -72,7 +72,7 @@ def kills_per_game(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text="Give me a player name")
     else:
         CURSOR.execute(
-            "SELECT name, (kills / num_played) FROM xlrstats WHERE name=?",
+            "SELECT name, (kills / rounds) FROM xlrstats WHERE name=?",
             context.args,
         )
         result = CURSOR.fetchall()
@@ -140,7 +140,7 @@ def best_ratio(update, context):
 
 def most_played(update, context):
     CURSOR.execute(
-        "SELECT name, num_played FROM xlrstats WHERE num_played = ( SELECT MAX(num_played) FROM xlrstats )",
+        "SELECT name, rounds FROM xlrstats WHERE rounds = ( SELECT MAX(rounds) FROM xlrstats )",
         context.args,
     )
     data = CURSOR.fetchall()[0]
