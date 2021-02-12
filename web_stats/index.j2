@@ -48,6 +48,12 @@
   <body>
     <div class="container">
       <h1>El Parque - UrT Stats</h1>
+      <h5>{{server_data}}</h5>
+      <ol>
+      {% for player in players_data %}
+      <li>{{player}}</li>
+      {% endfor %}
+      </ol>
       <table id="stats">
         <thead>
         <tr>
