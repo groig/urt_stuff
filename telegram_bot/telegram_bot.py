@@ -23,7 +23,7 @@ def main():
     top_ten_kills_handler = CommandHandler("top_ten_kills", top_ten_kills)
     top_ten_ratio_handler = CommandHandler("top_ten_ratio", top_ten_ratio)
     player_count_handler = CommandHandler("player_count", player_count)
-    kills_per_game_handler = CommandHandler("kills_per_game", kills_per_game)
+    kills_per_round_handler = CommandHandler("kills_per_round", kills_per_round)
     server_status_handler = CommandHandler("server_status", server_status)
     stream_handler = CommandHandler("stream", stream)
 
@@ -39,7 +39,7 @@ def main():
     updater.dispatcher.add_handler(top_ten_kills_handler)
     updater.dispatcher.add_handler(top_ten_ratio_handler)
     updater.dispatcher.add_handler(player_count_handler)
-    updater.dispatcher.add_handler(kills_per_game_handler)
+    updater.dispatcher.add_handler(kills_per_round_handler)
     updater.dispatcher.add_handler(server_status_handler)
     updater.dispatcher.add_handler(stream_handler)
 
@@ -69,12 +69,12 @@ def stats(update, context):
             context.bot.send_message(chat_id=update.effective_chat.id, text="No player found")
 
 
-def kills_per_game(update, context):
+def kills_per_round(update, context):
     if not context.args or len(context.args) > 1:
         context.bot.send_message(chat_id=update.effective_chat.id, text="Give me a player name")
     else:
         CURSOR.execute(
-            "SELECT name, (kills / rounds) FROM xlrstats WHERE name=?",
+            "SELECT name, round(CAST(kills AS FLOAT)/rounds,2) FROM xlrstats WHERE name=?",
             context.args,
         )
         result = CURSOR.fetchall()
