@@ -4240,6 +4240,11 @@ if __name__ == "__main__":
     curs.execute('CREATE TABLE IF NOT EXISTS ban_points (id INTEGER PRIMARY KEY NOT NULL, guid TEXT NOT NULL, point_type TEXT, expires DATETIME)')
     curs.execute('CREATE TABLE IF NOT EXISTS frags (fragger TEXT, fragged TEXT, weapon TEXT)')
 
+    # create views if not exists
+    curs.execute('CREATE VIEW IF NOT EXISTS aggregates AS SELECT SUM(kills) AS sum_kills, SUM(deaths) AS sum_deaths, SUM(headshots) AS sum_headshots, SUM(suicides) AS sum_suicides, MAX(ratio) AS max_ratio FROM xlrstats')
+    curs.execute('CREATE VIEW IF NOT EXISTS formulas AS SELECT a.name, a.rounds, a.kills, a.deaths, a.headshots, a.max_kill_streak, a.suicides, CASE WHEN a.kills = 0 THEN 0.0 WHEN a.kills > 0 AND (a.deaths + a.suicides) = 0 THEN max_ratio + 0.001 ELSE ROUND(CAST(a.kills AS REAL) / (a.deaths + a.suicides),3) END f_ratio, COALESCE(ROUND(CAST(a.kills AS REAL) * 100 / b.sum_kills,3),0) AS f_lethality FROM xlrstats AS a, aggregates AS b')
+    curs.execute('CREATE VIEW IF NOT EXISTS scores AS SELECT name, rounds, kills, deaths, headshots, max_kill_streak, suicides, ROUND(CAST(f_ratio AS REAL) * f_lethality,2) AS score FROM formulas ORDER BY score DESC, max_kill_streak DESC, headshots DESC, suicides ASC, deaths ASC, rounds ASC, name ASC')
+
     # create instance of LogParser
     LogParser(os.path.join(HOME, 'conf', 'settings.conf'))
 
