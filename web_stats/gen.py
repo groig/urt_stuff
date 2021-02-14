@@ -15,7 +15,7 @@ c = conn.cursor()
 def main():
     print("generating")
 
-    general_data = c.execute("SELECT name, rounds, kills, deaths, headshots, max_kill_streak, suicides, ratio, rounds FROM xlrstats ORDER BY ratio DESC").fetchall()
+    general_data = c.execute("SELECT name, rounds, kills, deaths, headshots, max_kill_streak, suicides, score FROM scores").fetchall()
 
     favorite_weapons = c.execute("select fragger, weapon, count(*) as frags from frags group by lower(fragger), lower(weapon) order by lower(fragger) asc, count(*) desc").fetchall()
 
