@@ -4,12 +4,14 @@ import jinja2
 from time import sleep
 import datetime
 from pyquake3 import PyQuake3
+from math import sqrt
 
 server = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
 template_loader = jinja2.FileSystemLoader(searchpath="./")
 template_env = jinja2.Environment(loader=template_loader)
 template = template_env.get_template("index.j2")
 conn = sqlite3.connect("data.sqlite")
+conn.create_function("sqrt", 1, sqrt)
 c = conn.cursor()
 
 def main():
