@@ -114,6 +114,10 @@
       .dataTable-wrapper {
         width: 100%;
       }
+      .dataTable-top,
+      .dataTable-bottom {
+        padding: 8px 0;
+      }
       .number {
         font-family: monospace;
       }
@@ -145,9 +149,11 @@
             <th>Kills</th>
             <th>Deaths</th>
             <th>Headshots</th>
-            <th>Max Kill Streak</th>
+            <th>Streak</th>
             <th>Suicides</th>
             <th>Ratio</th>
+            <th>Lethality</th>
+            <th>Score</th>
           </tr>
         </thead>
         <tbody>
@@ -161,6 +167,8 @@
           <td class="number">{{player.5}}</td>
           <td class="number">{{player.6}}</td>
           <td class="number">{{player.7}}</td>
+          <td class="number">{{player.8}}</td>
+          <td class="number">{{player.9}}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -290,6 +298,6 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
-  <script>const dataTable = new simpleDatatables.DataTable("#stats", {"order": [[ 7, "desc" ]]});</script>
+  <script>const dataTable = new simpleDatatables.DataTable("#stats", {"order": [[ 9, "desc" ]], "paging": false});</script>
   </body>
 </html>

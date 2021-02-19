@@ -4240,6 +4240,11 @@ if __name__ == "__main__":
     curs.execute('CREATE TABLE IF NOT EXISTS ban_points (id INTEGER PRIMARY KEY NOT NULL, guid TEXT NOT NULL, point_type TEXT, expires DATETIME)')
     curs.execute('CREATE TABLE IF NOT EXISTS frags (fragger TEXT, fragged TEXT, weapon TEXT)')
 
+    # create views if not exists
+    curs.execute('DROP VIEW IF EXISTS aggregates')
+    curs.execute('DROP VIEW IF EXISTS formulas')
+    curs.execute('DROP VIEW IF EXISTS scores')
+
     # create instance of LogParser
     LogParser(os.path.join(HOME, 'conf', 'settings.conf'))
 
