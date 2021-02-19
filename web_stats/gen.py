@@ -3,9 +3,9 @@ import sqlite3
 import jinja2
 from time import sleep
 import datetime
-from pyquake3 import PyQuake3
+# from pyquake3 import PyQuake3
 
-server = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
+# server = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
 template_loader = jinja2.FileSystemLoader(searchpath="./")
 template_env = jinja2.Environment(loader=template_loader)
 template = template_env.get_template("index.j2")
@@ -14,6 +14,12 @@ c = conn.cursor()
 
 def main():
     print("generating")
+
+    players_names = c.execute('select name from xlrstats').fetchall()
+    players_profiles = {};
+    for name in players_names:
+        if not name[0] in players_profiles:
+            players_profiles[name[0]] = {"frags": [], "deaths": [], "weapons": []}
 
     general_data = c.execute("SELECT name, rounds, kills, deaths, headshots, max_kill_streak, suicides, ratio, rounds FROM xlrstats ORDER BY ratio DESC").fetchall()
 
@@ -25,6 +31,10 @@ def main():
             weapons_data[player[0]] = [(player[1].replace('UT_MOD_', ''), player[2])]
         else:
             weapons_data[player[0]].append((player[1].replace('UT_MOD_', ''), player[2]))
+        if len(players_profiles[player[0]]['weapons']) == 0:
+            players_profiles[player[0]]['weapons'] = [(player[1].replace('UT_MOD_', ''), player[2])]
+        else:
+            players_profiles[player[0]]['weapons'].append((player[1].replace('UT_MOD_', ''), player[2]))
 
     frags_repartition = c.execute("select fragger, fragged, count(*) as frags from frags group by lower(fragger), lower(fragged) order by lower(fragger) asc, count(*) desc").fetchall()
     frags_data = {}
@@ -33,6 +43,11 @@ def main():
             frags_data[frag[0]] = [(frag[1], frag[2])]
         else:
             frags_data[frag[0]].append((frag[1], frag[2]))
+        if len(players_profiles[frag[0]]['frags']) == 0:
+            players_profiles[frag[0]]['frags'] = [(frag[1], frag[2])]
+        else:
+            players_profiles[frag[0]]['frags'].append((frag[1], frag[2]))
+
 
     deaths_repartition = c.execute("select fragged, fragger, count(*) from frags group by lower(fragged), lower(fragger) order by lower(fragged) asc, count(*) desc").fetchall()
 
@@ -42,11 +57,30 @@ def main():
             deaths_data[frag[0]] = [(frag[1], frag[2])]
         else:
             deaths_data[frag[0]].append((frag[1], frag[2]))
+        if len(players_profiles[frag[0]]['deaths']) == 0:
+            players_profiles[frag[0]]['deaths'] = [(frag[1], frag[2])]
+        else:
+            players_profiles[frag[0]]['deaths'].append((frag[1], frag[2]))
 
-    server.update()
-    server_data = f"Running map {server.values[b'mapname'].decode()} with {len(server.players)} player(s)."
-    players_data = [f"{player.name} with {player.frags} frags and a {player.ping} ms ping" for player in server.players]
-    output_text = template.render(general_data=general_data, favorite_weapons=weapons_data, frags_repartition=frags_data, deaths_repartition=deaths_data, server_data=server_data, players_data=players_data, dt=datetime.datetime.now())
+    
+    print(players_profiles)
+
+    
+
+
+
+    # server.update()
+    # server_data = f"Running map {server.values[b'mapname'].decode()} with {len(server.players)} player(s)."
+    # players_data = [f"{player.name} with {player.frags} frags and a {player.ping} ms ping" for player in server.players]
+    output_text = template.render(
+            general_data=general_data, 
+            profiles = players_profiles, 
+            favorite_weapons=weapons_data, 
+            frags_repartition=frags_data, 
+            deaths_repartition=deaths_data, 
+            # server_data=server_data, 
+            # players_data=players_data, 
+            dt=datetime.datetime.now())
 
     with open("index.html", "w") as fh:
         fh.write(output_text)

@@ -134,7 +134,7 @@
       <h5>Updated: {{dt}}</h5>
       <ol>
       {% for player in players_data %}
-        <li>{{player}}</li>
+        <li><a href="#{{player}}">{{player}}</a></li>
       {% endfor %}
       </ol>
       <table id="stats">
@@ -153,7 +153,7 @@
         <tbody>
         {% for player in general_data%}
         <tr>
-          <td>{{player.0}}</td>
+          <td><a href="#{{player.0}}">{{player.0}}</a></td>
           <td class="number">{{player.1}}</td>
           <td class="number">{{player.2}}</td>
           <td class="number">{{player.3}}</td>
@@ -178,7 +178,7 @@
             <tbody>
               {%for frag in frags%}
               <tr>
-                <td>{{frag.0}}</td>
+                <td><a href="#{{frag.0}}">{{frag.0}}</a></td>
                 <td class="number">{{frag.1}}</td>
               </tr>
               {% endfor %}
@@ -200,7 +200,7 @@
             <tbody>
               {%for death in deaths%}
               <tr>
-                <td>{{death.0}}</td>
+                <td><a href="#{{death.0}}">{{death.0}}</a></td>
                 <td class="number">{{death.1}}</td>
               </tr>
               {% endfor %}
@@ -232,6 +232,63 @@
         {% endfor %}
       </div>
     </div>
+      <section>
+        <h2>Players Profiles</h2>
+        {% for player in profiles %}
+        <section id="{{player}}">
+          <h3>{{player}}</h3>
+      <div class="grid grid-1of3">
+        <div class="grid-cell">
+          <h4>Frags</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th><th>Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for frag in profiles[player]['frags'] %}
+              <tr><td><a href="#{{frag[0]}}">{{frag[0]}}</a></td><td>{{frag[1]}}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          </div>
+        <div class="grid-cell">
+         <h4>Deaths</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th><th>Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for death in profiles[player]['deaths'] %}
+              <tr><td><a href="#{{death[0]}}">{{death[0]}}</a></td><td>{{death[1]}}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>      
+          </div>
+        <div class="grid-cell">
+          <h4>Weapons</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Weapon</th><th>Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for weapon in profiles[player]['weapons'] %}
+                <tr><td>{{weapon[0]}}</td><td>{{weapon[1]}}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          </div>
+          </div>
+        {% endfor %}
+      </section>
+      </section>
+
+
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
   <script>const dataTable = new simpleDatatables.DataTable("#stats", {"order": [[ 7, "desc" ]]});</script>
   </body>
