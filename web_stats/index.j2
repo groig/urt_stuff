@@ -121,6 +121,9 @@
       .number {
         font-family: monospace;
       }
+      #profiles thead{
+        display: none;
+      }
     </style>
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
   </head>
@@ -240,7 +243,7 @@
         {% endfor %}
       </div>
     </div>
-      <section>
+      <section id="profiles">
         <h2>Players Profiles</h2>
         {% for player in profiles %}
         <section id="{{player}}">
