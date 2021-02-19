@@ -4,20 +4,20 @@ import jinja2
 from time import sleep
 import datetime
 from pyquake3 import PyQuake3
-from math import sqrt
+from math import ln
 
 server = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
 template_loader = jinja2.FileSystemLoader(searchpath="./")
 template_env = jinja2.Environment(loader=template_loader)
 template = template_env.get_template("index.j2")
 conn = sqlite3.connect("data.sqlite")
-conn.create_function("sqrt", 1, sqrt)
+conn.create_function("ln", 1, ln)
 c = conn.cursor()
 
 def main():
     print("generating")
 
-    general_data = c.execute("WITH tmp01 AS (SELECT SUM(kills) AS sum_kills, SUM(deaths) + SUM(suicides) AS sum_deaths, MAX(ratio) AS max_ratio FROM xlrstats), tmp02 AS (SELECT a.name, a.rounds, a.kills, a.deaths, a.headshots, a.max_kill_streak, a.suicides, CASE WHEN a.kills = 0 THEN 0.0 WHEN a.kills > 0 AND (a.deaths + a.suicides) = 0 THEN max_ratio + 0.01 ELSE CAST(a.kills AS REAL) / (a.deaths + a.suicides) END tmp_ratio, COALESCE(CAST(a.kills AS REAL) * 100 / b.sum_kills, 0) AS tmp_lethality FROM xlrstats AS a, tmp01 AS b), tmp03 AS (SELECT name, rounds, kills, deaths, headshots, max_kill_streak, suicides, ROUND(tmp_ratio, 2) AS ratio, ROUND(tmp_lethality, 2) AS lethality, ROUND(CAST(tmp_ratio AS REAL) * SQRT(tmp_lethality), 3) AS tmp_score FROM tmp02), tmp04 AS (SELECT SUM(tmp_score) as sum_tmpscore FROM tmp03) SELECT a.name, a.rounds, a.kills, a.deaths, a.headshots, a.max_kill_streak, a.suicides, a.ratio, a.lethality, COALESCE(ROUND(CAST(a.tmp_score AS REAL) * 100 / b.sum_tmpscore, 2), 0) AS score FROM tmp03 AS a, tmp04 AS b ORDER BY score DESC, max_kill_streak DESC, headshots DESC, suicides ASC, deaths ASC, rounds ASC, name ASC").fetchall()
+    general_data = c.execute("WITH tmp00 AS ( SELECT name, rounds, kills, deaths, deaths + suicides AS realdeaths, ratio, headshots, max_kill_streak AS streak, suicides FROM xlrstats ), tmp01 AS ( SELECT SUM(kills) AS sum_kills, MAX(ratio) AS max_ratio FROM tmp00 ), tmp02 AS ( SELECT a.name, a.rounds, a.kills, a.deaths, a.realdeaths, a.headshots, a.streak, a.suicides, CASE WHEN a.kills = 0 THEN 0.0 WHEN a.realdeaths > 0 THEN CAST(a.kills AS REAL) / a.realdeaths ELSE 0.01 + max_ratio END tmp_ratio, COALESCE(100.0 * a.kills / b.sum_kills, 0.0) AS tmp_lethality FROM tmp00 AS a, tmp01 AS b ), tmp03 AS ( SELECT name, rounds, kills, deaths, realdeaths, headshots, streak, suicides, tmp_ratio, tmp_lethality, tmp_ratio * LN(1.0 + tmp_lethality) AS tmp_score FROM tmp02 ), tmp04 AS ( SELECT SUM(tmp_score) as sum_tmpscore FROM tmp03 ) SELECT a.name, a.rounds, a.kills, a.deaths, a.headshots, a.streak, a.suicides, PRINTF("%.2f", ROUND(tmp_ratio, 2)) AS ratio, PRINTF("%.2f", ROUND(tmp_lethality, 2)) AS lethality, PRINTF("%.2f", COALESCE(ROUND(100.0 * a.tmp_score / b.sum_tmpscore, 2), 0.0)) AS score FROM tmp03 AS a, tmp04 AS b ORDER BY a.tmp_score DESC, a.streak DESC, a.headshots DESC, a.realdeaths ASC, a.suicides ASC, a.rounds ASC, a.name ASC").fetchall()
 
     favorite_weapons = c.execute("select fragger, weapon, count(*) as frags from frags group by lower(fragger), lower(weapon) order by lower(fragger) asc, count(*) desc").fetchall()
 
