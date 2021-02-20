@@ -6,64 +6,26 @@
     <title>UrT stats</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://bootswatch.com/4/cosmo/bootstrap.min.css" crossorigin="anonymous">
     <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-      }
       body {
-        font-family: 'Montserrat', sans-serif;
+        padding: 1rem 0;
       }
-      nav ul {
-        display: flex;
-        justify-content: center;
-      }
-      nav ul li {
-        text-transform: capitalize;
-        margin: 0 1em;
-      }
-      nav ul li a {
-        color: #01579b;
-      }
-      nav ul li a:hover {
-        text-decoration: none;
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        text-align: center;
       }
       h4 {
         background-color: #01579b;
         color: #fff;
         margin: 0;
         padding: 0.5em 0.75em;
-        text-align: center;
       }
-      ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-      li {
-        line-height: 1.5;
-      }
-      table {
-        text-align: right;
-        width: 100%;
-      }
-      table,
-      th,
-      td {
-        border-collapse: collapse;
-      }
-      th,
-      td {
-        padding: 0.75em;
-      }
-      thead {
-        background-color: #01579b;
-        color: #fff;
-        font-weight: 500;
-      }
-      tbody {
-        background-color: #eee;
+      table td {
+        text-align:right;
       }
       table td:first-child,
       table th:first-child {
@@ -73,78 +35,52 @@
         color: #01579b;
         cursor: pointer;
       }
-      .container {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        flex-direction: column;
-        max-width: 960px;
-        margin: 0 auto;
-      }
-      .grid {
-        display: flex;
-        flex-wrap: wrap;
-        margin: -1em 0 0 -1em;
-      }
-      .grid-cell {
-        flex: 1;
-        margin: 0;
-        padding: 1em 0 0 1em;
-      }
-      .grid-fit > .grid-cell {
-        flex: 1;
-      }
-      .grid-full > .grid-cell {
-        flex: 0 0 100%;
-      }
-      .grid-1of2 > .grid-cell {
-        flex: 0 0 50%
-      }
-      .grid-1of3 > .grid-cell {
-        flex: 0 0 33.3333%
-      }
-      .grid-1of4 > .grid-cell {
-        flex: 0 0 25%
-      }
-      .box {
-        background-color: #eee;
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        padding: 0.75em;
-      }
       .dataTable-wrapper {
         width: 100%;
       }
       .dataTable-top,
       .dataTable-bottom {
-        padding: 8px 0;
+        padding: 0.5rem 0 !important;
       }
       .number {
         font-family: monospace;
       }
-      #profiles thead{
+      .card-player table{
+        margin-bottom: 0;
+      }
+      .card-player thead{
         display: none;
+      }
+      .go-up {
+        background-color: #01579b;
+        border-radius: 100%;
+        bottom: 1em;
+        color: #fff;
+        font-size: 2rem;
+        height: 1em;
+        line-height: 0.75em;
+        position: fixed;
+        right: 1em;
+        text-align: center;
+        text-decoration: none;
+        width: 1em;
       }
     </style>
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <div class="container">
-      <h1>El Parque - UrT Stats</h1>
-      <nav>
-        <ul>
-          <li><a href="#frags">frags</a></li>
-          <li><a href="#deaths">deaths</a></li>
-          <li><a href="#weapons">weapons</a></li>
-        </ul>
-      </nav>
-      <h3>{{server_data}}</h3>
+      <header class="jumbotron">
+        <h1 class="display-4">El Parque - UrT Stats</h1>
+      </header>
+      <h2>{{server_data}}</h2>
       <h5>Updated: {{dt}}</h5>
       <ol>
       {% for player in players_data %}
         <li><a href="#{{player}}">{{player}}</a></li>
       {% endfor %}
       </ol>
-      <table id="stats">
+      <table id="stats" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>Name</th>
@@ -176,130 +112,85 @@
         {% endfor %}
         </tbody>
       </table>
-      <h2 id="frags">Frags repartition</h2>
-      <div class="grid grid-1of4">
-      {% for player, frags in frags_repartition.items()%}
-        <div class="grid-cell">
-          <table>
-            <thead>
-              <tr>
-                <th colspan="2">{{player}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {%for frag in frags%}
-              <tr>
-                <td><a href="#{{frag.0}}">{{frag.0}}</a></td>
-                <td class="number">{{frag.1}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      {% endfor %}
-      </div>
-      <h2 id="deaths">Deaths repartition</h2>
-      <div class="grid grid-1of4">
-      {% for player, deaths in deaths_repartition.items()%}
-        <div class="grid-cell">
-          <table>
-            <thead>
-              <tr>
-                <th colspan="2">{{player}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {%for death in deaths%}
-              <tr>
-                <td><a href="#{{death.0}}">{{death.0}}</a></td>
-                <td class="number">{{death.1}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      {% endfor %}
-      </div>
-      <h2 id="weapons">Favorite Killing Weapons</h2>
-      <div class="grid grid-1of4">
-        {% for player, weapons in favorite_weapons.items() %}
-        <div class="grid-cell">
-          <table>
-            <thead>
-              <tr>
-                <th colspan="2">{{player}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {%for weapon in weapons%}
-              <tr>
-                <td>{{weapon.0}}</td>
-                <td class="number">{{weapon.1}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-      <section id="profiles">
-        <h2>Players Profiles</h2>
+      <section>
+        <h2>Player Profiles</h2>
         {% for player in profiles %}
-        <section id="{{player}}">
-          <h3>{{player}}</h3>
-      <div class="grid grid-1of3">
-        <div class="grid-cell">
-          <h4>Frags</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Player</th><th>Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for frag in profiles[player]['frags'] %}
-              <tr><td><a href="#{{frag[0]}}">{{frag[0]}}</a></td><td>{{frag[1]}}</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          </div>
-        <div class="grid-cell">
-         <h4>Deaths</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Player</th><th>Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for death in profiles[player]['deaths'] %}
-              <tr><td><a href="#{{death[0]}}">{{death[0]}}</a></td><td>{{death[1]}}</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>      
-          </div>
-        <div class="grid-cell">
-          <h4>Weapons</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Weapon</th><th>Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for weapon in profiles[player]['weapons'] %}
-                <tr><td>{{weapon[0]}}</td><td>{{weapon[1]}}</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          </div>
-          </div>
-        {% endfor %}
-      </section>
-      </section>
-
-
+          <section id="{{player}}" class="card card-player mb-4">
+            <h3 class=card-header>{{player}}</h3>
+            <ul class="nav nav-tabs nav-justified" id="tab-{{player}}" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="link-frags-{{player}}" data-toggle="tab" href="#tab-frags-{{player}}" role="tab" aria-controls="Frags" aria-selected="true">Fragged</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="link-deaths-{{player}}" data-toggle="tab" href="#tab-deaths-{{player}}" role="tab" aria-controls="Deaths" aria-selected="false">Fragged by</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="link-weapons-{{player}}" data-toggle="tab" href="#tab-weapons-{{player}}" role="tab" aria-controls="Weapons" aria-selected="false">Weapons Used</a>
+                </li>
+              </ul>
+            <div class="tab-content" id="tab-content-{{player}}">
+              <div class="tab-pane fade show active" id="tab-frags-{{player}}" role="tabpanel" aria-labelledby="frags-tab">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Qty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for frag in profiles[player]['frags'] %}
+                    <tr>
+                      <td><a href="#{{frag[0]}}">{{frag[0]}}</a></td>
+                      <td class="number">{{frag[1]}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="tab-deaths-{{player}}" role="tabpanel" aria-labelledby="deaths-tab">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Qty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for death in profiles[player]['deaths'] %}
+                    <tr>
+                      <td><a href="#{{death[0]}}">{{death[0]}}</a></td>
+                      <td class="number">{{death[1]}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="tab-weapons-{{player}}" role="tabpanel" aria-labelledby="weapons-tab">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Weapon</th>
+                      <th>Qty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for weapon in profiles[player]['weapons'] %}
+                      <tr>
+                        <td>{{weapon[0]}}</td>
+                        <td class="number">{{weapon[1]}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section> <!-- player section -->
+        {% endfor %} <!-- players -->
+      </section> <!-- players section -->
+    </div> <!-- container -->
+    <a href="#" class="go-up">&uarr;</a>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
   <script>const dataTable = new simpleDatatables.DataTable("#stats", {"order": [[ 9, "desc" ]], "paging": false});</script>
   </body>
