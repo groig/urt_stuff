@@ -207,7 +207,7 @@
                   {% for frag in profiles[player]['frags'] %}
                   <tr>
                     <td><a href="#{{frag[0]}}">{{frag[0]}}</a></td>
-                    <td>{{frag[1]}}</td>
+                    <td class="number">{{frag[1]}}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -226,7 +226,7 @@
                   {% for death in profiles[player]['deaths'] %}
                   <tr>
                     <td><a href="#{{death[0]}}">{{death[0]}}</a></td>
-                    <td>{{death[1]}}</td>
+                    <td class="number">{{death[1]}}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -243,10 +243,10 @@
                 </thead>
                 <tbody>
                   {% for weapon in profiles[player]['weapons'] %}
-                    <tr>
-                      <td>{{weapon[0]}}</td>
-                      <td>{{weapon[1]}}</td>
-                    </tr>
+                  <tr>
+                    <td>{{weapon[0]}}</td>
+                    <td class="number">{{weapon[1]}}</td>
+                  </tr>
                   {% endfor %}
                 </tbody>
               </table>
