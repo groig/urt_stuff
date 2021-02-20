@@ -15,6 +15,9 @@
       body {
         font-family: 'Montserrat', sans-serif;
       }
+      section {
+        width: 100%;
+      }
       nav ul {
         display: flex;
         justify-content: center;
@@ -29,12 +32,17 @@
       nav ul li a:hover {
         text-decoration: none;
       }
+      h1,
+      h2,
+      h3,
+      h4 {
+        text-align: center;
+      }
       h4 {
         background-color: #01579b;
         color: #fff;
         margin: 0;
         padding: 0.5em 0.75em;
-        text-align: center;
       }
       ul {
         list-style-type: none;
@@ -55,7 +63,7 @@
       }
       th,
       td {
-        padding: 0.75em;
+        padding: 0.5em;
       }
       thead {
         background-color: #01579b;
@@ -74,12 +82,12 @@
         cursor: pointer;
       }
       .container {
-        display: flex;
         align-items: center;
-        justify-content: space-around;
+        display: flex;
         flex-direction: column;
-        max-width: 960px;
+        justify-content: space-around;
         margin: 0 auto;
+        max-width: 960px;
       }
       .grid {
         display: flex;
@@ -116,10 +124,24 @@
       }
       .dataTable-top,
       .dataTable-bottom {
-        padding: 8px 0;
+        padding: 0.5rem 0 !important;
       }
       .number {
         font-family: monospace;
+      }
+      .go-up {
+        background-color: #01579b;
+        border-radius: 100%;
+        bottom: 1em;
+        color: #fff;
+        font-size: 2rem;
+        height: 1em;
+        line-height: 0.75em;
+        position: fixed;
+        right: 1em;
+        text-align: center;
+        text-decoration: none;
+        width: 1em;
       }
     </style>
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -127,14 +149,7 @@
   <body>
     <div class="container">
       <h1>El Parque - UrT Stats</h1>
-      <nav>
-        <ul>
-          <li><a href="#frags">frags</a></li>
-          <li><a href="#deaths">deaths</a></li>
-          <li><a href="#weapons">weapons</a></li>
-        </ul>
-      </nav>
-      <h3>{{server_data}}</h3>
+      <h2>{{server_data}}</h2>
       <h5>Updated: {{dt}}</h5>
       <ol>
       {% for player in players_data %}
@@ -173,131 +188,75 @@
         {% endfor %}
         </tbody>
       </table>
-      <h2 id="frags">Frags repartition</h2>
-      <div class="grid grid-1of4">
-      {% for player, frags in frags_repartition.items()%}
-        <div class="grid-cell">
-          <table>
-            <thead>
-              <tr>
-                <th colspan="2">{{player}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {%for frag in frags%}
-              <tr>
-                <td><a href="#{{frag.0}}">{{frag.0}}</a></td>
-                <td class="number">{{frag.1}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      {% endfor %}
-      </div>
-      <h2 id="deaths">Deaths repartition</h2>
-      <div class="grid grid-1of4">
-      {% for player, deaths in deaths_repartition.items()%}
-        <div class="grid-cell">
-          <table>
-            <thead>
-              <tr>
-                <th colspan="2">{{player}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {%for death in deaths%}
-              <tr>
-                <td><a href="#{{death.0}}">{{death.0}}</a></td>
-                <td class="number">{{death.1}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      {% endfor %}
-      </div>
-      <h2 id="weapons">Favorite Killing Weapons</h2>
-      <div class="grid grid-1of4">
-        {% for player, weapons in favorite_weapons.items() %}
-        <div class="grid-cell">
-          <table>
-            <thead>
-              <tr>
-                <th colspan="2">{{player}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {%for weapon in weapons%}
-              <tr>
-                <td>{{weapon.0}}</td>
-                <td class="number">{{weapon.1}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
       <section>
-        <h2>Players Profiles</h2>
+        <h2>Player Profiles</h2>
         {% for player in profiles %}
         <section id="{{player}}">
           <h3>{{player}}</h3>
-      <div class="grid grid-1of3">
-        <div class="grid-cell">
-          <h4>Frags</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Player</th><th>Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for frag in profiles[player]['frags'] %}
-              <tr><td><a href="#{{frag[0]}}">{{frag[0]}}</a></td><td>{{frag[1]}}</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          </div>
-        <div class="grid-cell">
-         <h4>Deaths</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Player</th><th>Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for death in profiles[player]['deaths'] %}
-              <tr><td><a href="#{{death[0]}}">{{death[0]}}</a></td><td>{{death[1]}}</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>      
-          </div>
-        <div class="grid-cell">
-          <h4>Weapons</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Weapon</th><th>Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for weapon in profiles[player]['weapons'] %}
-                <tr><td>{{weapon[0]}}</td><td>{{weapon[1]}}</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          </div>
-          </div>
-        {% endfor %}
-      </section>
-      </section>
-
-
+          <div class="grid grid-1of3">
+            <div class="grid-cell">
+              <h4>Frags</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    <th>Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for frag in profiles[player]['frags'] %}
+                  <tr>
+                    <td><a href="#{{frag[0]}}">{{frag[0]}}</a></td>
+                    <td>{{frag[1]}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div> <!-- frags -->
+            <div class="grid-cell">
+              <h4>Deaths</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    <th>Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for death in profiles[player]['deaths'] %}
+                  <tr>
+                    <td><a href="#{{death[0]}}">{{death[0]}}</a></td>
+                    <td>{{death[1]}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div> <!-- deaths -->
+            <div class="grid-cell">
+              <h4>Weapons</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Weapon</th>
+                    <th>Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for weapon in profiles[player]['weapons'] %}
+                    <tr>
+                      <td>{{weapon[0]}}</td>
+                      <td>{{weapon[1]}}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div> <!-- weapons -->
+          </div> <!-- grid -->
+        </section> <!-- player section -->
+        {% endfor %} <!-- players -->
+      </section> <!-- players section -->
+    </div> <!-- container -->
+    <a href="#" class="go-up">&uarr;</a>
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
-  <script>const dataTable = new simpleDatatables.DataTable("#stats", {"order": [[ 9, "desc" ]], "paging": false});</script>
   </body>
 </html>
