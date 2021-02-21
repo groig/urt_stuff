@@ -115,76 +115,68 @@
       <section>
         <h2>Player Profiles</h2>
         {% for player in profiles %}
-          <section id="{{player}}" class="card card-player mb-4">
-            <h3 class=card-header>{{player}}</h3>
-            <ul class="nav nav-tabs nav-justified" id="tab-{{player}}" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active" id="link-frags-{{player}}" data-toggle="tab" href="#tab-frags-{{player}}" role="tab" aria-controls="Frags" aria-selected="true">Fragged</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="link-deaths-{{player}}" data-toggle="tab" href="#tab-deaths-{{player}}" role="tab" aria-controls="Deaths" aria-selected="false">Fragged by</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="link-weapons-{{player}}" data-toggle="tab" href="#tab-weapons-{{player}}" role="tab" aria-controls="Weapons" aria-selected="false">Fragged Using</a>
-                </li>
-              </ul>
-            <div class="tab-content" id="tab-content-{{player}}">
-              <div class="tab-pane fade show active" id="tab-frags-{{player}}" role="tabpanel" aria-labelledby="frags-tab">
-                <table class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>Player</th>
-                      <th>Qty</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for frag in profiles[player]['frags'] %}
-                    <tr>
-                      <td><a href="#{{frag[0]}}">{{frag[0]}}</a></td>
-                      <td class="number">{{frag[1]}}</td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-              <div class="tab-pane fade" id="tab-deaths-{{player}}" role="tabpanel" aria-labelledby="deaths-tab">
-                <table class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>Player</th>
-                      <th>Qty</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for death in profiles[player]['deaths'] %}
-                    <tr>
-                      <td><a href="#{{death[0]}}">{{death[0]}}</a></td>
-                      <td class="number">{{death[1]}}</td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-              <div class="tab-pane fade" id="tab-weapons-{{player}}" role="tabpanel" aria-labelledby="weapons-tab">
-                <table class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>Weapon</th>
-                      <th>Qty</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for weapon in profiles[player]['weapons'] %}
-                      <tr>
-                        <td>{{weapon[0]}}</td>
-                        <td class="number">{{weapon[1]}}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section> <!-- player section -->
+        <section id="{{player}}">
+          <h3>{{player}}</h3>
+          <div class="grid grid-1of3">
+            <div class="grid-cell">
+              <h4>Fragged</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    <th>Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for frag in profiles[player]['frags'] %}
+                  <tr>
+                    <td><a href="#{{frag[0]}}">{{frag[0]}}</a></td>
+                    <td class="number">{{frag[1]}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div> <!-- frags -->
+            <div class="grid-cell">
+              <h4>Fragged by</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    <th>Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for death in profiles[player]['deaths'] %}
+                  <tr>
+                    <td><a href="#{{death[0]}}">{{death[0]}}</a></td>
+                    <td class="number">{{death[1]}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div> <!-- deaths -->
+            <div class="grid-cell">
+              <h4>Fragged Using</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Weapon</th>
+                    <th>Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for weapon in profiles[player]['weapons'] %}
+                  <tr>
+                    <td>{{weapon[0]}}</td>
+                    <td class="number">{{weapon[1]}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div> <!-- weapons -->
+          </div> <!-- grid -->
+        </section> <!-- player section -->
         {% endfor %} <!-- players -->
       </section> <!-- players section -->
     </div> <!-- container -->
