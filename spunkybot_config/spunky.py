@@ -3514,7 +3514,8 @@ class Player(object):
         self.name = self.name[:20]
 
     def get_name(self):
-        return self.name
+        # return self.name
+        return self.aliases[0]
 
     def set_authname(self, authname):
         self.authname = authname
