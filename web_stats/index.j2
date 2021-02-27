@@ -65,6 +65,10 @@
         text-decoration: none;
         width: 1.25em;
       }
+      .go-up:hover {
+        color: #fff;
+        text-decoration: none;
+      }
     </style>
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
   </head>
@@ -115,7 +119,7 @@
       <section>
         <h2>Player Profiles</h2>
         {% for player, data in profiles.items() %}
-          <section id="{{player}}" class="card card-player mb-4">
+          <section id="{{data.name}}" class="card card-player mb-4">
             <h3 class=card-header>{{data["name"]}}</h3>
             <ul class="nav nav-tabs nav-justified" id="tab-{{player}}" role="tablist">
                 <li class="nav-item">
