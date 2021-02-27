@@ -1102,7 +1102,7 @@ class LogParser(object):
 
 
             if killer.get_registered_user() and victim.get_registered_user() and death_cause != "MOD_CHANGE_TEAM":
-                curs.execute('INSERT INTO frags VALUES (?, ?, ?)', (killer_name, victim_name, death_cause))
+                curs.execute('INSERT INTO frags VALUES (?, ?, ?)', (killer.get_guid(), victim.get_guid(), death_cause))
 
             msg = parts[1].strip().replace("UT_MOD_", "")
             send_update(msg)
@@ -3514,8 +3514,7 @@ class Player(object):
         self.name = self.name[:20]
 
     def get_name(self):
-        # return self.name
-        return self.aliases[0]
+        return self.name
 
     def set_authname(self, authname):
         self.authname = authname
