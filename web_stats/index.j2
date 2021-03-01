@@ -38,6 +38,9 @@
       .dataTable-wrapper {
         width: 100%;
       }
+      dataTable-container {
+        border: none;
+      }
       .dataTable-top,
       .dataTable-bottom {
         padding: 0.5rem 0 !important;
@@ -54,20 +57,27 @@
       .go-up {
         background-color: #2780e3;
         border-radius: 100%;
-        bottom: 1em;
+        bottom: 0.5em;
         color: #fff;
         font-size: 2.5rem;
         height: 1.25em;
         line-height: 1em;
         position: fixed;
-        right: 1em;
+        right: 0.5em;
         text-align: center;
         text-decoration: none;
+        transition: all ease 0.2s;
         width: 1.25em;
       }
       .go-up:hover {
+        background-color: #e9ecef;
         color: #fff;
         text-decoration: none;
+      }
+      @media screen and (max-width: 900px) {
+        .dataTable-wrapper {
+          overflow-x: scroll;
+        }
       }
     </style>
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -92,7 +102,7 @@
             <th>Kills</th>
             <th>Deaths</th>
             <th>Headshots</th>
-            <th>Streak</th>
+            <th>Max Streak</th>
             <th>Suicides</th>
             <th>Ratio</th>
             <th>Lethality</th>
