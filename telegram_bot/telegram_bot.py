@@ -25,6 +25,8 @@ def main():
     player_count_handler = CommandHandler("player_count", player_count)
     kills_per_round_handler = CommandHandler("kills_per_round", kills_per_round)
     deaths_per_round_handler = CommandHandler("deaths_per_round", deaths_per_round)
+    suicides_per_round_handler = CommandHandler("suicides_per_round", suicides_per_round)
+    headshots_per_round_handler = CommandHandler("headshots_per_round", headshots_per_round)
     server_status_handler = CommandHandler("server_status", server_status)
     stream_handler = CommandHandler("stream", stream)
 
@@ -42,6 +44,8 @@ def main():
     updater.dispatcher.add_handler(player_count_handler)
     updater.dispatcher.add_handler(kills_per_round_handler)
     updater.dispatcher.add_handler(deaths_per_round_handler)
+    updater.dispatcher.add_handler(suicides_per_round_handler)
+    updater.dispatcher.add_handler(headshots_per_round_handler)
     updater.dispatcher.add_handler(server_status_handler)
     updater.dispatcher.add_handler(stream_handler)
 
@@ -104,6 +108,42 @@ def deaths_per_round(update, context):
             context.bot.send_message(
                 chat_id=update.effective_chat.id,
                 text=f"Name: {data[0]}\nDeaths/Round: {data[1]}",
+            )
+        else:
+            context.bot.send_message(chat_id=update.effective_chat.id, text="No player found")
+            
+def suicides_per_round(update, context):
+    if not context.args or len(context.args) > 1:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Give me a player name")
+    else:
+        CURSOR.execute(
+            "SELECT name, round(CAST(suicides AS FLOAT)/rounds,2) FROM xlrstats WHERE name=?",
+            context.args,
+        )
+        result = CURSOR.fetchall()
+        if result:
+            data = result[0]
+            context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text=f"Name: {data[0]}\nSuicides/Round: {data[1]}",
+            )
+        else:
+            context.bot.send_message(chat_id=update.effective_chat.id, text="No player found")
+            
+def headshots_per_round(update, context):
+    if not context.args or len(context.args) > 1:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Give me a player name")
+    else:
+        CURSOR.execute(
+            "SELECT name, round(CAST(headshots AS FLOAT)/rounds,2) FROM xlrstats WHERE name=?",
+            context.args,
+        )
+        result = CURSOR.fetchall()
+        if result:
+            data = result[0]
+            context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text=f"Name: {data[0]}\nHeadshots/Round: {data[1]}",
             )
         else:
             context.bot.send_message(chat_id=update.effective_chat.id, text="No player found")
