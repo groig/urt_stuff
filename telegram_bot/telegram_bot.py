@@ -7,6 +7,7 @@ from telegram.ext import CommandHandler, Updater
 CURSOR = sqlite3.connect("data.sqlite", check_same_thread=False).cursor()
 
 server = PyQuake3("127.0.0.1:27960", rcon_password=os.getenv("RCON_PASSWORD"))
+stream_user = os.getenv("STREAM_USER")
 
 def main():
     updater = Updater(token=os.getenv("TELEGRAM_TOKEN"), use_context=True)
@@ -250,18 +251,24 @@ def stream(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
     elif len(context.args) > 1:
         context.bot.send_message(chat_id=update.effective_chat.id, text="Wrong args")
+
     else:
-        operation = context.args[0].lower()
-        if operation == "on":
-            if not os.path.exists(filename):
-                open(filename, "a").close()
-            context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is on")
-        elif operation == "off":
-            if os.path.exists(filename):
-                os.remove(filename)
-            context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is off")
+        from_user = update.message.from_user.username
+        if from_user == stream_user:
+            operation = context.args[0].lower()
+            if operation == "on":
+                if not os.path.exists(filename):
+                    open(filename, "a").close()
+                context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is on")
+            elif operation == "off":
+                if os.path.exists(filename):
+                    os.remove(filename)
+                context.bot.send_message(chat_id=update.effective_chat.id, text="Stream is off")
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id, text="u dumb")
         else:
-            context.bot.send_message(chat_id=update.effective_chat.id, text="u dumb")
+            context.bot.send_message(chat_id=update.effective_chat.id, text="NO TOQUES")
+
 
 if __name__ == "__main__":
     main()
