@@ -52,13 +52,17 @@ logger.propagate = False
 
 TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_GROUP_ID=os.getenv("TELEGRAM_GROUP_ID")
+TELEGRAM_MESSAGE_ID=os.getenv("TELEGRAM_MESSAGE_ID")
 
 def is_streaming():
     return os.path.exists("telegram-stream")
 
-def send_update(msg):
+def send_update(game):
     if is_streaming():
-        url = "https://api.telegram.org/bot{token}/sendMessage?chat_id={group_id}&text={msg}".format(token=TELEGRAM_TOKEN, group_id=TELEGRAM_GROUP_ID, msg=urllib2.quote(msg))
+        server_data = "Map {mapname} with {players} player(s):".format(mapname=game.mapname, players=(len(game.players) - 1))
+        players_data = "\n".join([player.name for player in game.players.itervalues() if player.name != "World"])
+        msg = "{server_data}\n{players_data}".format(server_data=server_data, players_data=players_data)
+        url = "https://api.telegram.org/bot{token}/editMessageText?chat_id={group_id}&message_id={message_id}&text={msg}".format(token=TELEGRAM_TOKEN, group_id=TELEGRAM_GROUP_ID, message_id=TELEGRAM_MESSAGE_ID, msg=urllib2.quote(msg))
         urllib2.urlopen(url)
 
 
@@ -809,6 +813,7 @@ class LogParser(object):
         # allow nextmap votes
         self.allow_nextmap_vote = True
         self.failed_vote_timer = 0
+        send_update(game)
 
     def handle_spawn(self, line):
         """
@@ -999,7 +1004,6 @@ class LogParser(object):
             player_auth = player.get_authname()
             player_name = "%s [^5%s^7]" % (player_name, player_auth) if player_auth else player_name
             player_id = player.get_player_id()
-            send_update("{player_name} has entered the battle".format(player_name=player_name))
             # Welcome message for registered players
             if player.get_registered_user() and player.get_welcome_msg():
                 self.game.rcon_say("^3Everyone welcome back ^7%s^3, player number ^7#%s^3, to this server" % (player_name, player_id))
@@ -1013,6 +1017,7 @@ class LogParser(object):
                 self.game.rcon_tell(player_num, "^7Welcome %s, this must be your first visit, you are player ^3#%s^7. ^3Type ^2!help ^3in chat for help" % (player_name, player_id))
                 player.disable_welcome_msg()
             logger.debug("ClientBegin: Player %d %s has entered the game", player_num, player_name)
+            send_update(self.game)
 
     def handle_disconnect(self, line):
         """
@@ -1032,7 +1037,7 @@ class LogParser(object):
                 player.clear_tk(player_num)
                 player.clear_grudged_player(player_num)
             logger.debug("ClientDisconnect: Player %d %s has left the game", player_num, player_name)
-            send_update("{player_name} has disconnected".format(player_name=player_name))
+            send_update(self.game)
 
     def handle_hit(self, line):
         """
@@ -1104,8 +1109,7 @@ class LogParser(object):
             if killer.get_registered_user() and victim.get_registered_user() and death_cause != "MOD_CHANGE_TEAM":
                 curs.execute('INSERT INTO frags VALUES (?, ?, ?)', (killer.get_guid(), victim.get_guid(), death_cause))
 
-            msg = parts[1].strip().replace("UT_MOD_", "")
-            send_update(msg)
+            # send_update(self.game)
 
             # teamkill event - disabled for FFA, LMS, Jump, for all other game modes team kills are counted and punished
             if not self.ffa_lms_gametype:
