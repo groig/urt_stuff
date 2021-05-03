@@ -63,7 +63,10 @@ def send_update(game):
         players_data = "\n".join([player.name for player in game.players.itervalues() if player.name != "World"])
         msg = "{server_data}\n{players_data}".format(server_data=server_data, players_data=players_data)
         url = "https://api.telegram.org/bot{token}/editMessageText?chat_id={group_id}&message_id={message_id}&text={msg}".format(token=TELEGRAM_TOKEN, group_id=TELEGRAM_GROUP_ID, message_id=TELEGRAM_MESSAGE_ID, msg=urllib2.quote(msg))
-        urllib2.urlopen(url)
+        try:
+            urllib2.urlopen(url)
+        except:
+            pass
 
 
 
@@ -813,7 +816,7 @@ class LogParser(object):
         # allow nextmap votes
         self.allow_nextmap_vote = True
         self.failed_vote_timer = 0
-        send_update(game)
+        # send_update(game)
 
     def handle_spawn(self, line):
         """
@@ -1017,7 +1020,7 @@ class LogParser(object):
                 self.game.rcon_tell(player_num, "^7Welcome %s, this must be your first visit, you are player ^3#%s^7. ^3Type ^2!help ^3in chat for help" % (player_name, player_id))
                 player.disable_welcome_msg()
             logger.debug("ClientBegin: Player %d %s has entered the game", player_num, player_name)
-            send_update(self.game)
+            # send_update(self.game)
 
     def handle_disconnect(self, line):
         """
@@ -1037,7 +1040,7 @@ class LogParser(object):
                 player.clear_tk(player_num)
                 player.clear_grudged_player(player_num)
             logger.debug("ClientDisconnect: Player %d %s has left the game", player_num, player_name)
-            send_update(self.game)
+            # send_update(self.game)
 
     def handle_hit(self, line):
         """
